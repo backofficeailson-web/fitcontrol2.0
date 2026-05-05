@@ -1,188 +1,241 @@
-import { useEffect, useState } from "react";
+Reescreva completamente meu projeto FitControl Pro sem quebrar funcionalidades, corrigindo integração frontend/backend e entregando um visual premium nível app pago.
 
-const API = "https://fitcontrol-backend-wo77.onrender.com";
+STACK:
+- Frontend: React + Vite
+- Backend: Node.js + Express
+- Banco: SQLite
+- Frontend hospedado na Vercel
+- Backend hospedado no Render
 
-export default function App() {
-  const [alunos, setAlunos] = useState([]);
-  const [nome, setNome] = useState("");
-  const [idade, setIdade] = useState("");
-  const [peso, setPeso] = useState("");
+BACKEND ONLINE:
+https://fitcontrol-backend-wo77.onrender.com
 
-  async function carregarAlunos() {
-    const res = await fetch(`${API}/api/alunos`);
-    const data = await res.json();
-    setAlunos(data);
-  }
+OBJETIVO:
+Entregar um sistema funcional fullstack para gestão fitness:
+- cadastro de alunos
+- listagem de alunos
+- exclusão de alunos
+- visual premium dark moderno
+- integração real com backend
+- responsivo mobile
+- pronto para expansão
 
-  async function cadastrarAluno(e) {
-    e.preventDefault();
+==================================================
+ESTRUTURA
+==================================================
 
-    await fetch(`${API}/api/alunos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, idade: Number(idade), peso: Number(peso) }),
-    });
+Frontend:
+C:\Users\Cliente\Desktop\Fitcontrol 2.0
 
-    setNome("");
-    setIdade("");
-    setPeso("");
-    carregarAlunos();
-  }
+Backend:
+C:\Users\Cliente\Desktop\Fitcontrol 2.0\backend
 
-  useEffect(() => {
-    carregarAlunos();
-  }, []);
+==================================================
+BACKEND
+==================================================
 
-  return (
-    <main style={styles.page}>
-      <section style={styles.hero}>
-        <div>
-          <p style={styles.badge}>FITCONTROL PRO</p>
-          <h1 style={styles.title}>Gestão fitness profissional</h1>
-          <p style={styles.subtitle}>Alunos, evolução e controle em um só lugar.</p>
-        </div>
-        <div style={styles.stats}>
-          <strong>{alunos.length}</strong>
-          <span>alunos ativos</span>
-        </div>
-      </section>
+Reescreva backend/server.js completo.
 
-      <section style={styles.card}>
-        <h2 style={styles.cardTitle}>Cadastrar aluno</h2>
+Usar:
+- express
+- cors
+- dotenv
+- better-sqlite3
+- bcryptjs
+- jsonwebtoken
 
-        <form onSubmit={cadastrarAluno} style={styles.form}>
-          <input style={styles.input} placeholder="Nome do aluno" value={nome} onChange={(e) => setNome(e.target.value)} required />
-          <input style={styles.input} placeholder="Idade" type="number" value={idade} onChange={(e) => setIdade(e.target.value)} required />
-          <input style={styles.input} placeholder="Peso (kg)" type="number" value={peso} onChange={(e) => setPeso(e.target.value)} required />
-          <button style={styles.button}>Cadastrar</button>
-        </form>
-      </section>
+Configuração obrigatória:
 
-      <section style={styles.card}>
-        <h2 style={styles.cardTitle}>Alunos cadastrados</h2>
+const PORT = process.env.PORT || 3000;
 
-        {alunos.length === 0 ? (
-          <div style={styles.empty}>Nenhum aluno cadastrado ainda.</div>
-        ) : (
-          <div style={styles.grid}>
-            {alunos.map((a) => (
-              <div key={a.id} style={styles.studentCard}>
-                <div style={styles.avatar}>{a.nome?.charAt(0)?.toUpperCase()}</div>
-                <div>
-                  <strong>{a.nome}</strong>
-                  <p>{a.idade} anos • {a.peso}kg</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-    </main>
-  );
-}
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
 
-const styles = {
-  page: {
-    minHeight: "100vh",
-    background: "radial-gradient(circle at top, #1e293b, #020617 65%)",
-    color: "#fff",
-    padding: "28px",
-    fontFamily: "Arial, sans-serif",
-  },
-  hero: {
-    maxWidth: "980px",
-    margin: "0 auto 24px",
-    display: "flex",
-    justifyContent: "space-between",
-    gap: "20px",
-    alignItems: "center",
-  },
-  badge: {
-    color: "#22d3ee",
-    letterSpacing: "3px",
-    fontWeight: "bold",
-    fontSize: "12px",
-  },
-  title: {
-    fontSize: "42px",
-    margin: "8px 0",
-  },
-  subtitle: {
-    color: "#cbd5e1",
-    fontSize: "18px",
-  },
-  stats: {
-    background: "rgba(255,255,255,.08)",
-    border: "1px solid rgba(255,255,255,.15)",
-    borderRadius: "24px",
-    padding: "24px",
-    minWidth: "150px",
-    textAlign: "center",
-    boxShadow: "0 20px 60px rgba(0,0,0,.35)",
-  },
-  card: {
-    maxWidth: "980px",
-    margin: "0 auto 22px",
-    background: "rgba(15,23,42,.86)",
-    border: "1px solid rgba(148,163,184,.18)",
-    borderRadius: "26px",
-    padding: "24px",
-    boxShadow: "0 22px 70px rgba(0,0,0,.35)",
-  },
-  cardTitle: {
-    marginTop: 0,
-  },
-  form: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-    gap: "14px",
-  },
-  input: {
-    background: "#111827",
-    color: "#fff",
-    border: "1px solid #334155",
-    borderRadius: "16px",
-    padding: "15px",
-    fontSize: "16px",
-    outline: "none",
-  },
-  button: {
-    border: 0,
-    borderRadius: "16px",
-    padding: "15px",
-    fontWeight: "bold",
-    fontSize: "16px",
-    color: "#fff",
-    background: "linear-gradient(135deg, #22d3ee, #f97316)",
-    cursor: "pointer",
-  },
-  empty: {
-    color: "#94a3b8",
-    padding: "22px",
-    border: "1px dashed #334155",
-    borderRadius: "18px",
-    textAlign: "center",
-  },
-  grid: {
-    display: "grid",
-    gap: "14px",
-  },
-  studentCard: {
-    display: "flex",
-    alignItems: "center",
-    gap: "14px",
-    background: "#020617",
-    border: "1px solid #1e293b",
-    borderRadius: "18px",
-    padding: "16px",
-  },
-  avatar: {
-    width: "46px",
-    height: "46px",
-    borderRadius: "50%",
-    background: "linear-gradient(135deg, #22d3ee, #f97316)",
-    display: "grid",
-    placeItems: "center",
-    fontWeight: "bold",
-  },
-};
+Adicionar:
+GET /
+retornando:
+"FitControl Backend online"
+
+ROTAS:
+
+POST /api/auth/register
+POST /api/auth/login
+GET /api/alunos
+POST /api/alunos
+PUT /api/alunos/:id
+DELETE /api/alunos/:id
+
+==================================================
+DATABASE
+==================================================
+
+Criar backend/database.js:
+
+Tabela users:
+- id
+- email
+- password
+
+Tabela alunos:
+- id
+- nome
+- idade
+- peso
+
+==================================================
+GITIGNORE
+==================================================
+
+backend/.gitignore:
+
+node_modules
+.env
+database.db
+
+==================================================
+FRONTEND
+==================================================
+
+Criar src/config.js:
+
+export const API = "https://fitcontrol-backend-wo77.onrender.com";
+
+==================================================
+APP PREMIUM
+==================================================
+
+Reescreva src/App.jsx COMPLETO.
+
+REQUISITOS:
+- dark mode premium
+- glassmorphism
+- gradientes modernos
+- layout profissional SaaS
+- responsivo mobile
+- animações suaves
+- cards modernos
+- dashboard visual
+- contador de alunos
+- cadastro de alunos
+- exclusão de alunos
+- consumo real da API
+
+USAR:
+
+GET:
+${API}/api/alunos
+
+POST:
+${API}/api/alunos
+
+DELETE:
+${API}/api/alunos/${id}
+
+==================================================
+FUNCIONALIDADES
+==================================================
+
+Implementar:
+- carregar alunos automaticamente
+- cadastrar aluno
+- excluir aluno
+- atualizar lista automaticamente
+- loading states
+- feedback visual
+- botão premium hover
+- cards premium
+
+==================================================
+DESIGN
+==================================================
+
+Visual estilo:
+- app pago
+- SaaS moderno
+- dashboard fitness
+- minimalista premium
+- fundo escuro
+- neon cyan + orange
+- sombras suaves
+- bordas arredondadas
+- aparência semelhante:
+Stripe
+Linear
+Notion
+Vercel
+Supabase
+
+==================================================
+RESPONSIVIDADE
+==================================================
+
+Precisa funcionar:
+- celular
+- tablet
+- desktop
+
+==================================================
+IMPORTANTE
+==================================================
+
+NÃO usar:
+- localhost
+- firebase
+- supabase
+- tailwind obrigatório
+- dependências desnecessárias
+
+USAR APENAS:
+- React puro
+- CSS inline ou modular simples
+- fetch API
+
+==================================================
+ENTREGA
+==================================================
+
+Entregar arquivos completos:
+
+backend/server.js
+backend/database.js
+backend/package.json
+backend/.gitignore
+
+frontend/src/config.js
+frontend/src/App.jsx
+
+==================================================
+COMANDOS FINAIS
+==================================================
+
+BACKEND:
+
+cd "C:\Users\Cliente\Desktop\Fitcontrol 2.0\backend"
+
+git add .
+git commit -m "backend final premium"
+git push
+
+FRONTEND:
+
+cd "C:\Users\Cliente\Desktop\Fitcontrol 2.0"
+
+git add .
+git commit -m "frontend premium final"
+git push
+
+==================================================
+RESULTADO FINAL ESPERADO
+==================================================
+
+- sistema online funcionando
+- backend online no Render
+- frontend online na Vercel
+- visual premium
+- cadastro de alunos funcionando
+- exclusão funcionando
+- API funcionando
+- responsivo
+- aparência profissional
+- pronto para virar SaaS fitness
