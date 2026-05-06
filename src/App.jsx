@@ -143,8 +143,13 @@ export default function App() {
   };
 
   const loadExs = async (treinoId) => {
-    try { const r = await apiFetch(`${API}/api/treinos/${treinoId}/exercicios`); if (r.ok) setExercicios(prev => ({ ...prev, [treinoId]: await r.json() })); }
-    catch (e) {}
+    try {
+      const r = await apiFetch(`${API}/api/treinos/${treinoId}/exercicios`);
+      if (r.ok) {
+        const data = await r.json();
+        setExercicios(prev => ({ ...prev, [treinoId]: data }));
+      }
+    } catch (e) {}
   };
 
   const loadFotos = async (alunoId) => {
@@ -339,7 +344,7 @@ export default function App() {
     loadFotos(selectedAluno.id);
   };
 
-  // ============ MÉTRICAS ============
+  // ============ METRICAS ============
   const totAlunos = alunos.length;
   const imcs = alunos.map(a => calcIMC(a.peso, a.altura)).filter(v => v);
   const imcMedio = imcs.length ? (imcs.reduce((a, b) => a + b, 0) / imcs.length).toFixed(1) : "0";
