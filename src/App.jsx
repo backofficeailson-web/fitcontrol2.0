@@ -1,50 +1,69 @@
-Reescreva completamente meu projeto FitControl Pro sem quebrar funcionalidades, corrigindo integração frontend/backend e entregando um visual premium nível app pago.
-
-STACK:
-- Frontend: React + Vite
-- Backend: Node.js + Express
-- Banco: SQLite
-- Frontend hospedado na Vercel
-- Backend hospedado no Render
-
-BACKEND ONLINE:
-https://fitcontrol-backend-wo77.onrender.com
-
-OBJETIVO:
-Entregar um sistema funcional fullstack para gestão fitness:
-- cadastro de alunos
-- listagem de alunos
-- exclusão de alunos
-- visual premium dark moderno
-- integração real com backend
-- responsivo mobile
-- pronto para expansão
+Reescreva completamente meu projeto FitControl Pro sem quebrar funcionalidades existentes, adicionando backend funcional, integração real frontend/backend e visual premium nível SaaS pago.
 
 ==================================================
-ESTRUTURA
+STACK
 ==================================================
 
 Frontend:
-C:\Users\Cliente\Desktop\Fitcontrol 2.0
+- React
+- Vite
+- Fetch API
+- CSS inline premium
+- Responsivo
 
 Backend:
-C:\Users\Cliente\Desktop\Fitcontrol 2.0\backend
+- Node.js
+- Express
+- SQLite
+- better-sqlite3
+- JWT
+- bcryptjs
+
+Hospedagem:
+- Frontend: Vercel
+- Backend: Render
+
+==================================================
+LINKS
+==================================================
+
+Frontend:
+https://fitcontrol-ailson.vercel.app
+
+Backend:
+https://fitcontrol-backend-wo77.onrender.com
+
+==================================================
+OBJETIVO
+==================================================
+
+Criar sistema fitness profissional com:
+
+- dashboard premium
+- cadastro de alunos
+- listagem de alunos
+- excluir aluno
+- editar aluno
+- integração real API
+- responsivo mobile
+- visual nível app pago
 
 ==================================================
 BACKEND
 ==================================================
 
-Reescreva backend/server.js completo.
+Reescrever backend/server.js completo.
 
 Usar:
+
 - express
 - cors
 - dotenv
-- better-sqlite3
 - bcryptjs
 - jsonwebtoken
+- better-sqlite3
 
-Configuração obrigatória:
+Obrigatório:
 
 const PORT = process.env.PORT || 3000;
 
@@ -52,15 +71,19 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-Adicionar:
+Criar rota:
+
 GET /
 retornando:
 "FitControl Backend online"
 
-ROTAS:
+==================================================
+ROTAS API
+==================================================
 
 POST /api/auth/register
 POST /api/auth/login
+
 GET /api/alunos
 POST /api/alunos
 PUT /api/alunos/:id
@@ -73,15 +96,15 @@ DATABASE
 Criar backend/database.js:
 
 Tabela users:
-- id
-- email
-- password
+- id INTEGER PRIMARY KEY AUTOINCREMENT
+- email TEXT UNIQUE
+- password TEXT
 
 Tabela alunos:
-- id
-- nome
-- idade
-- peso
+- id INTEGER PRIMARY KEY AUTOINCREMENT
+- nome TEXT
+- idade INTEGER
+- peso REAL
 
 ==================================================
 GITIGNORE
@@ -94,34 +117,45 @@ node_modules
 database.db
 
 ==================================================
-FRONTEND
+CONFIG FRONTEND
 ==================================================
 
-Criar src/config.js:
+Criar:
+src/config.js
+
+Com:
 
 export const API = "https://fitcontrol-backend-wo77.onrender.com";
 
 ==================================================
-APP PREMIUM
+FRONTEND PREMIUM
 ==================================================
 
-Reescreva src/App.jsx COMPLETO.
+Reescrever src/App.jsx COMPLETO.
 
-REQUISITOS:
-- dark mode premium
-- glassmorphism
-- gradientes modernos
-- layout profissional SaaS
-- responsivo mobile
-- animações suaves
-- cards modernos
-- dashboard visual
+==================================================
+FUNCIONALIDADES
+==================================================
+
+Implementar:
+
+- carregar alunos automaticamente
+- cadastrar aluno
+- excluir aluno
+- editar aluno
+- atualização automática da lista
+- loading state
+- feedback visual
+- hover animations
+- dashboard premium
 - contador de alunos
-- cadastro de alunos
-- exclusão de alunos
-- consumo real da API
+- cards modernos
 
-USAR:
+==================================================
+API
+==================================================
+
+Usar:
 
 GET:
 ${API}/api/alunos
@@ -129,42 +163,55 @@ ${API}/api/alunos
 POST:
 ${API}/api/alunos
 
+PUT:
+${API}/api/alunos/${id}
+
 DELETE:
 ${API}/api/alunos/${id}
 
 ==================================================
-FUNCIONALIDADES
+EDITAR ALUNO
 ==================================================
 
-Implementar:
-- carregar alunos automaticamente
-- cadastrar aluno
-- excluir aluno
-- atualizar lista automaticamente
-- loading states
-- feedback visual
-- botão premium hover
-- cards premium
+Adicionar botão:
+"Editar"
+
+Ao clicar:
+- preencher formulário automaticamente
+- permitir atualização dos dados
+- salvar com PUT
 
 ==================================================
-DESIGN
+EXCLUIR ALUNO
 ==================================================
 
-Visual estilo:
-- app pago
-- SaaS moderno
-- dashboard fitness
-- minimalista premium
-- fundo escuro
-- neon cyan + orange
+Adicionar botão:
+"Excluir"
+
+Com:
+confirm("Deseja excluir este aluno?")
+
+==================================================
+DESIGN PREMIUM
+==================================================
+
+Visual inspirado em:
+- Stripe
+- Linear
+- Vercel
+- Supabase
+- Notion
+
+Características:
+- dark mode
+- glassmorphism
+- gradientes neon cyan + orange
 - sombras suaves
+- cards premium
 - bordas arredondadas
-- aparência semelhante:
-Stripe
-Linear
-Notion
-Vercel
-Supabase
+- UX moderna
+- responsivo
+- aparência SaaS
 
 ==================================================
 RESPONSIVIDADE
@@ -176,34 +223,33 @@ Precisa funcionar:
 - desktop
 
 ==================================================
-IMPORTANTE
+NÃO USAR
 ==================================================
 
-NÃO usar:
 - localhost
 - firebase
 - supabase
-- tailwind obrigatório
 - dependências desnecessárias
 
-USAR APENAS:
+==================================================
+USAR APENAS
+==================================================
+
 - React puro
+- Fetch API
 - CSS inline ou modular simples
-- fetch API
 
 ==================================================
-ENTREGA
+ENTREGAR ARQUIVOS COMPLETOS
 ==================================================
-
-Entregar arquivos completos:
 
 backend/server.js
 backend/database.js
 backend/package.json
 backend/.gitignore
 
-frontend/src/config.js
-frontend/src/App.jsx
+src/config.js
+src/App.jsx
 
 ==================================================
 COMANDOS FINAIS
@@ -226,16 +272,17 @@ git commit -m "frontend premium final"
 git push
 
 ==================================================
-RESULTADO FINAL ESPERADO
+RESULTADO FINAL
 ==================================================
 
 - sistema online funcionando
-- backend online no Render
-- frontend online na Vercel
-- visual premium
+- frontend conectado ao backend
+- backend online Render
+- frontend online Vercel
 - cadastro de alunos funcionando
-- exclusão funcionando
-- API funcionando
+- editar funcionando
+- excluir funcionando
+- visual premium
 - responsivo
 - aparência profissional
 - pronto para virar SaaS fitness
