@@ -1,0 +1,1 @@
+export const API = "https://fitcontrol-backend-wo77.onrender.com";
