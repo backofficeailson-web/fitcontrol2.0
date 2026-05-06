@@ -1,3 +1,4 @@
+// src/App.jsx — FitControl Pro com PWA Completo
 import { useState, useEffect, useCallback } from "react";
 import { API } from "./config";
 
@@ -75,6 +76,11 @@ export default function App() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // PWA
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
   // Auth
   const [authMode, setAuthMode] = useState("login");
   const [authForm, setAuthForm] = useState({ email: "", password: "" });
@@ -128,6 +134,51 @@ export default function App() {
   const loadExs = async (treinoId) => {
     try { const r = await fetch(`${API}/api/treinos/${treinoId}/exercicios`, { headers: headers() }); if (r.ok) setExercicios(prev => ({ ...prev, [treinoId]: await r.json() })); }
     catch (e) {}
+  };
+
+  // ============ PWA ============
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
+    if ('Notification' in window && Notification.permission === 'granted') {
+      setNotificationsEnabled(true);
+    }
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === 'accepted') {
+      setIsInstalled(true);
+      setSuccess('App instalado com sucesso!');
+    }
+    setInstallPrompt(null);
+  };
+
+  const handleEnableNotifications = async () => {
+    if (!('Notification' in window)) {
+      setError('Notificações não suportadas');
+      return;
+    }
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      setNotificationsEnabled(true);
+      new Notification('FitControl Pro', {
+        body: 'Notificações ativadas!',
+        icon: '/icons/icon-192.png'
+      });
+      setSuccess('Notificações ativadas!');
+    } else {
+      setError('Permissão negada');
+    }
   };
 
   useEffect(() => { loadAlunos(); }, [loadAlunos]);
@@ -200,8 +251,7 @@ export default function App() {
         setSuccess("Treino criado!");
       }
       setShowTreinoForm(false); setEditTreino(null); setFormTreino({ nome:"", divisao:"", observacoes:"" });
-      const novos = await (await fetch(`${API}/api/alunos/${selectedAluno.id}/treinos`, { headers: headers() })).json();
-      setTreinos(novos); loadAllExs(novos);
+      loadTreinos(selectedAluno.id).then(() => loadAllExs(treinos));
     } catch (er) { setError(er.message); }
   };
 
@@ -268,7 +318,6 @@ export default function App() {
 
   // ============ METRICAS ============
   const totAlunos = alunos.length;
-  const totTreinos = alunos.reduce((acc, a) => acc + (treinos.length || 0), 0);
   const pesos = alunos.filter(a => a.peso).map(a => a.peso);
   const imcsList = alunos.map(a => calcIMC(a.peso, a.altura)).filter(v => v);
   const imcMedio = imcsList.length ? (imcsList.reduce((a, b) => a + b, 0) / imcsList.length).toFixed(1) : "0";
@@ -314,6 +363,12 @@ export default function App() {
             <div style={styles.logoSub}>Painel Profissional</div>
           </div>
           <div style={styles.btnGroup}>
+            {installPrompt && !isInstalled && (
+              <button style={styles.btnPrimary} onClick={handleInstall}>📲 Instalar App</button>
+            )}
+            {!notificationsEnabled && (
+              <button style={styles.btnSmall} onClick={handleEnableNotifications}>🔔 Ativar Notificações</button>
+            )}
             <button style={styles.btnSmall} onClick={() => { setSelectedAluno(null); setTab("dashboard"); }}>Dashboard</button>
             <button style={styles.btnSmall} onClick={() => { setSelectedAluno(null); setTab("alunos"); }}>Alunos</button>
             <button style={styles.btnDanger} onClick={logout}>Sair</button>
@@ -429,7 +484,7 @@ export default function App() {
           </>
         )}
 
-        {/* ============ TREINOS + AVALIAÇÕES (aluno selecionado) ============ */}
+        {/* ============ TREINOS + AVALIAÇÕES ============ */}
         {tab === "treinos" && selectedAluno && (
           <>
             <div style={{ ...styles.card, marginBottom: 20 }}>
